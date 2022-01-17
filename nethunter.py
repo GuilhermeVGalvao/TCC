@@ -22,33 +22,46 @@ def start(interface = 'wlan0', maxtimeout=10):
     checkdir()
 
     try:
+        print('[*] Iniciando busca por redes wi-fi...')
         airodump = Popen( ['airodump-ng', interface, '-w', 'airodump-logs'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True )
-        output, errors = airodump.communicate(timeout=maxtimeout)
+        global output
+        airodump.communicate(timeout=maxtimeout)
     except subprocess.TimeoutExpired as e:
+        print('[*] Busca terminada!')
         airodump.send_signal(15)
-        #movefiles()
+        print('[*] Salvando arquivos de log...')
+        movefiles()
+        print('[*] Arquivos salvos no diretório airodump-logs/')
 
 
 def checkdir(path = LOGS_PATH):
+    print('[*] Verificando diretório de logs...')
     if os.path.isdir(path):
+        print('[*] Diretório encontrado')
         try:
-            os.remove( os.path.join(path, 'airodump-logs-01.cap') )
-            os.remove( os.path.join(path, 'airodump-logs-01.csv') )
-            os.remove( os.path.join(path, 'airodump-logs-01.kismet.csv') )
-            os.remove( os.path.join(path, 'airodump-logs-01.kismet.netxml') )
-            os.remove( os.path.join(path, 'airodump-logs-01.log.csv') )
-            print('[*] Arquivos de log antigos foram apagados')
-        except Exception as e:
-            print('[*] Não há arquivos de log antigos para limpeza')
+            print('[*] Arquivos de log antigos foram encontrados')
+            print('[*] Apagando arquivos de log antigos...')
+            del_oldlogs()
+            print('[*] Arquivos de log antigos apagados')
+        except FileNotFoundError as e:
+            print('[*] Não foram encontrados arquivos de log antigos')
         return True
     else:
+        print('[*] Diretório não encontrado!')
+        print('[*] Criando novo diretório de logs...')
         os.makedirs( os.path.join(CURRENT_PATH, 'airodump-logs') )
+        print('[*] Novo diretório de logs criado!')
         return False
 
 
-def movefiles(path = LOGS_PATH):
-    checkdir()
+def del_oldlogs():
     for archive in ARCHIVES_NAMES:
+        os.remove( os.path.join(LOGS_PATH, archive) )
+
+
+def movefiles(path = LOGS_PATH):
+    for archive in ARCHIVES_NAMES:
+        print('[*] Salvando', archive + '...')
         oldpath = os.path.join(CURRENT_PATH, archive)
         newpath = os.path.join(LOGS_PATH, archive)
         shutil.move(oldpath, newpath)
