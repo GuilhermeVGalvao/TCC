@@ -16,41 +16,46 @@ ARCHIVES_NAMES = (
     'airodump-logs-01.log.csv'
 )
 
+verbose = False
+
 #Salva todas as redes capturadas pelo airodump em arquivos especiais na pasta
 #airodump-logs
-def start(interface = 'wlan0', maxtimeout=10):
+def start(interface = 'wlan0', maxtimeout=10, useverbose=False):
+    global verbose
+    verbose = useverbose
+
     checkdir()
 
     try:
-        print('[*] Iniciando busca por redes wi-fi...')
+        dialog('Iniciando busca por redes wi-fi...')
         airodump = Popen( ['airodump-ng', interface, '-w', 'airodump-logs'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True )
         global output
         airodump.communicate(timeout=maxtimeout)
     except subprocess.TimeoutExpired as e:
-        print('[*] Busca terminada!')
+        dialog('Busca terminada!')
         airodump.send_signal(15)
-        print('[*] Salvando arquivos de log...')
+        dialog('Salvando arquivos de log...')
         movefiles()
-        print('[*] Arquivos salvos no diretório airodump-logs/')
+        dialog('Arquivos salvos no diretório airodump-logs/')
 
 
 def checkdir(path = LOGS_PATH):
-    print('[*] Verificando diretório de logs...')
+    dialog('Verificando diretório de logs...')
     if os.path.isdir(path):
-        print('[*] Diretório encontrado')
+        dialog('Diretório encontrado')
         try:
-            print('[*] Arquivos de log antigos foram encontrados')
-            print('[*] Apagando arquivos de log antigos...')
+            dialog('Arquivos de log antigos foram encontrados')
+            dialog('Apagando arquivos de log antigos...')
             del_oldlogs()
-            print('[*] Arquivos de log antigos apagados')
+            dialog('Arquivos de log antigos apagados')
         except FileNotFoundError as e:
-            print('[*] Não foram encontrados arquivos de log antigos')
+            dialog('Não foram encontrados arquivos de log antigos')
         return True
     else:
-        print('[*] Diretório não encontrado!')
-        print('[*] Criando novo diretório de logs...')
+        dialog('Diretório não encontrado!')
+        dialog('Criando novo diretório de logs...')
         os.makedirs( os.path.join(CURRENT_PATH, 'airodump-logs') )
-        print('[*] Novo diretório de logs criado!')
+        dialog('Novo diretório de logs criado!')
         return False
 
 
@@ -61,8 +66,12 @@ def del_oldlogs():
 
 def movefiles(path = LOGS_PATH):
     for archive in ARCHIVES_NAMES:
-        print('[*] Salvando', archive + '...')
+        dialog('Salvando', archive + '...')
         oldpath = os.path.join(CURRENT_PATH, archive)
         newpath = os.path.join(LOGS_PATH, archive)
         shutil.move(oldpath, newpath)
-    
+
+
+def dialog(*msg):
+    if verbose == True:
+        print('[*]', *msg)

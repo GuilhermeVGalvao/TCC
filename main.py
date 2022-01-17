@@ -2,4 +2,7 @@
 import sys
 import nethunter
 
-nethunter.start()
+if '-v' in sys.argv:
+    nethunter.start(useverbose=True)
+else:
+    nethunter.start()
