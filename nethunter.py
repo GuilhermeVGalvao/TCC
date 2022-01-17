@@ -23,7 +23,7 @@ def start(interface = 'wlan0', maxtimeout=10):
 
     try:
         print('[*] Iniciando busca por redes wi-fi...')
-        airodump = Popen( ['airodump-ng', interface, '-w', 'airodump-logs'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True )
+        airodump = Popen( ['airodump-ng', interface, '--wps', '-w', 'airodump-logs'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True )
         global output
         airodump.communicate(timeout=maxtimeout)
     except subprocess.TimeoutExpired as e:
