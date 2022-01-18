@@ -24,14 +24,13 @@ def start(interface = 'wlan0', maxtimeout=10):
     try:
         print('[*] Iniciando busca por redes wi-fi...')
         airodump = Popen( ['airodump-ng', interface, '--wps', '-w', 'airodump-logs'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True )
-        global output
+        
         airodump.communicate(timeout=maxtimeout)
     except subprocess.TimeoutExpired as e:
         print('[*] Busca terminada!')
-        airodump.send_signal(15)
-        print('[*] Salvando arquivos de log...')
+        airodump.terminate()
         movefiles()
-        print('[*] Arquivos salvos no diretório airodump-logs/')
+        
 
 
 def checkdir(path = LOGS_PATH):
@@ -60,9 +59,11 @@ def del_oldlogs():
 
 
 def movefiles(path = LOGS_PATH):
+    print('[*] Salvando arquivos de log...')
     for archive in ARCHIVES_NAMES:
         print('[*] Salvando', archive + '...')
         oldpath = os.path.join(CURRENT_PATH, archive)
         newpath = os.path.join(LOGS_PATH, archive)
         shutil.move(oldpath, newpath)
-    
+        
+    print('[*] Arquivos salvos no diretório airodump-logs/')    

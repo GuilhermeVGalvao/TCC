@@ -6,13 +6,15 @@ LOGS_PATH = os.path.join( CURRENT_PATH, 'airodump-logs' )
 DATABASE_PATH = os.path.join( LOGS_PATH, 'airodump-logs-01.csv' )
 
 def start():
+    print('[*] Gerando base de dados...')
     database = getdb()
-    
-    for i in range(0, len(database)):
-        print( f'{database[i]["bssid"]:17}', end=' ')
-        print( f'{database[i]["essid"]:32}', end=' ')
-        print( f'{database[i]["power"]:6}', end=' ')
-        print( f'{database[i]["privacity"]:8}')
+    new_database = organizate(database[:])
+
+    for i in range(0, len(new_database)):
+        print( f'{new_database[i]["bssid"]:17}', end=' ')
+        print( f'{new_database[i]["essid"]:32}', end=' ')
+        print( f'{new_database[i]["power"]:6}', end=' ')
+        print( f'{new_database[i]["privacity"]:8}')
 
 
 def getdb():
@@ -37,11 +39,29 @@ def getdb():
                 "privacity": content[5],
                 "cipher": content[6],
                 "authentication": content[7],
-                "power": content[8].replace('-', ''),
+                "power": content[8].replace(' -', ''),
                 "essid": content[13]
             }
             output.append(content_json)
-    
+    for i in range(1, len(output) ):
+        output[i]["speed"] = int(output[i]["speed"])
+        output[i]["power"] = int(output[i]["power"])
     return output[:]
 
-            
+
+def organizate(array):
+    new_array = []
+    while True:
+        bigger = 0
+        index = 0
+        for i in range( 1, len(array) ):
+            if array[i]["power"] >= bigger:
+                bigger = array[i]["power"]
+                index = i
+        new_array.append(array[index])
+        array.pop(index)
+
+        if len(array) == 1:
+            new_array.insert(0, array[0])
+            break
+    return new_array[:]
