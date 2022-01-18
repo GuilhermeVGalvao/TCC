@@ -1,21 +1,34 @@
-import os
+#!/usr/bin/python3
 
 import os
+
 CURRENT_PATH = os.getcwd()
 LOGS_PATH = os.path.join( CURRENT_PATH, 'airodump-logs' )
 DATABASE_PATH = os.path.join( LOGS_PATH, 'airodump-logs-01.csv' )
 
 def start():
-    print('[*] Gerando base de dados...')
+    print('[*] Gerando base de dados das redes wi-fi...')
     database = getdb()
-    new_database = organizate(database[:])
+    print('[*] Base de dados gerada!')
+    print('[*] Organizando base de dados...')
+    database = organizate(database[:])
+    print('[*] Base de dados organizada:')
 
-    for i in range(0, len(new_database)):
-        print( f'{new_database[i]["bssid"]:17}', end=' ')
-        print( f'{new_database[i]["essid"]:32}', end=' ')
-        print( f'{new_database[i]["power"]:6}', end=' ')
-        print( f'{new_database[i]["privacity"]:8}')
+    shortdb = []
+    for i in range(0, len(database)):
+        shortdb.append( database[i]["bssid"]+
+        database[i]["essid"]+' '+
+        str(database[i]["power"])+
+        database[i]["privacity"])
 
+        print( f'{database[i]["bssid"]:17}', end=' ')
+        print( f'{database[i]["essid"]:32}', end=' ')
+        print( f'{database[i]["power"]:6}', end=' ')
+        print( f'{database[i]["privacity"]:8}')
+
+    print('[*] Salvando base de dados...')
+    savedb(shortdb)
+    print('[*] Base de dados salva nos arquivos networks.txt e networks.json')
 
 def getdb():
     output = []
@@ -65,3 +78,11 @@ def organizate(array):
             new_array.insert(0, array[0])
             break
     return new_array[:]
+
+
+def savedb(array):
+    with open('networks.txt', 'w') as file:
+        file.write('')
+    with open('networks.txt', 'a') as file:
+        for i in range(1, len(array)):
+            file.write(array[i] + ' \n')
