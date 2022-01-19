@@ -187,4 +187,7 @@ airodump-logs-01.kismet.csv
 airodump-logs-01.kismet.netxml
 airodump-logs-01.log.csv
 
+networks.txt
+networks.json
+
 links_uteis.txt

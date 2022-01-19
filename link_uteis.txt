@@ -1,0 +1,5 @@
+LINKS PARA O TCC:
+https://www.youtube.com/watch?v=oeecoMUuoDw
+https://www.youtube.com/watch?v=NpA_H2gS9B0
+https://docs.python.org/pt-br/dev/library/subprocess.html
+https://docs.python.org/pt-br/dev/library/subprocess.html#subprocess.Popen.communicate

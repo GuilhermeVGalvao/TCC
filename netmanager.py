@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import json
 import os
 
 CURRENT_PATH = os.getcwd()
@@ -28,6 +29,7 @@ def start():
 
     print('[*] Salvando base de dados...')
     savedb(shortdb)
+    savejson(database)
     print('[*] Base de dados salva nos arquivos networks.txt e networks.json')
 
 def getdb():
@@ -86,3 +88,12 @@ def savedb(array):
     with open('networks.txt', 'a') as file:
         for i in range(1, len(array)):
             file.write(array[i] + ' \n')
+
+
+def savejson(array):
+    obj = {
+        "array": array
+    }
+    with open('networks.json', 'w') as file:
+        json.dump(obj, file, indent=3)
+        
