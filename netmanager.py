@@ -17,9 +17,9 @@ def start():
 
     shortdb = []
     for i in range(0, len(database)):
-        shortdb.append( database[i]["bssid"]+
+        shortdb.append( database[i]["bssid"]+' '+
         database[i]["essid"]+' '+
-        str(database[i]["power"])+
+        str(database[i]["power"])+' '+
         database[i]["privacity"])
 
         print( f'{database[i]["bssid"]:17}', end=' ')
@@ -48,14 +48,14 @@ def getdb():
                 continue
             
             content_json = {
-                "bssid": content[0],
-                "channel": content[3],
+                "bssid": content[0].strip(),
+                "channel": content[3].strip(),
                 "speed": content[4],
-                "privacity": content[5],
-                "cipher": content[6],
-                "authentication": content[7],
+                "privacity": content[5].strip(),
+                "cipher": content[6].strip(),
+                "authentication": content[7].strip(),
                 "power": content[8].replace(' -', ''),
-                "essid": content[13]
+                "essid": content[13].strip()
             }
             output.append(content_json)
     for i in range(1, len(output) ):

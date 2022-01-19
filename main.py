@@ -6,4 +6,5 @@ import netinvader
 import wifite_attacker
 
 #nethunter.start()
-netmanager.start()
+#netmanager.start()
+wifite_attacker.start()
