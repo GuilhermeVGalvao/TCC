@@ -2,18 +2,28 @@
 
 import json
 import os
+import re
+
+from printer import dialog
+
 
 CURRENT_PATH = os.getcwd()
 LOGS_PATH = os.path.join( CURRENT_PATH, 'airodump-logs' )
 DATABASE_PATH = os.path.join( LOGS_PATH, 'airodump-logs-01.csv' )
+OUTPUTPATH = os.path.join( LOGS_PATH, 'airodump-logs-output.txt' )
+
+WPS_NETWORKS_LIST = {}
 
 def start():
-    print('[*] Gerando base de dados das redes wi-fi...')
+    global WPS_NETWORKS_LIST
+    WPS_NETWORKS_LIST = get_wps_networks_list()
+    
+    dialog('Gerando base de dados das redes wi-fi...')
     database = getdb()
-    print('[*] Base de dados gerada!')
-    print('[*] Organizando base de dados...')
+    dialog('Base de dados gerada!')
+    dialog('Organizando base de dados...')
     database = organizate(database[:])
-    print('[*] Base de dados organizada:')
+    dialog('Base de dados organizada:')
 
     shortdb = []
     for i in range(0, len(database)):
@@ -25,15 +35,20 @@ def start():
         print( f'{database[i]["bssid"]:17}', end=' ')
         print( f'{database[i]["essid"]:32}', end=' ')
         print( f'{database[i]["power"]:6}', end=' ')
-        print( f'{database[i]["privacity"]:8}')
+        print( f'{database[i]["privacity"]:10}', end=' ')
+        print( f'{database[i]["wps"]:8}')
 
-    print('[*] Salvando base de dados...')
+    dialog('Salvando base de dados...', color='orange')
     savedb(shortdb)
     savejson(database)
-    print('[*] Base de dados salva nos arquivos networks.txt e networks.json')
+    dialog('Base de dados salva nos arquivos networks.txt e networks.json', color='blue')
 
 def getdb():
     output = []
+
+    if not os.path.exists(DATABASE_PATH):
+        raise PermissionError('Você não tem permissão de execussão')
+
     with open(DATABASE_PATH, 'r') as file:
         cont = 0
         for line in file:
@@ -57,6 +72,7 @@ def getdb():
                 "power": content[8].replace(' -', ''),
                 "essid": content[13].strip()
             }
+            content_json["wps"] = get_wps_from_bssid( content_json["bssid"] )
             output.append(content_json)
     for i in range(1, len(output) ):
         output[i]["speed"] = int(output[i]["speed"])
@@ -79,6 +95,7 @@ def organizate(array):
         if len(array) == 1:
             new_array.insert(0, array[0])
             break
+
     return new_array[:]
 
 
@@ -97,3 +114,46 @@ def savejson(array):
     with open('networks.json', 'w') as file:
         json.dump(obj, file, indent=3)
         
+
+def get_wps_from_bssid(bssid):
+    if bssid in WPS_NETWORKS_LIST.keys():
+        return WPS_NETWORKS_LIST[bssid]
+    else:
+        return 'Locke'
+    
+
+def cleanANSIcodes(text):
+    ansi_remover = re.compile(r'(\x9B|\x1B\[)[0-?]*[ -\/]*[@-~]')
+    realtext = ansi_remover.sub('', text)
+    return realtext
+
+
+def get_wps_networks_list():
+    count = -1
+    index_bssid = 0
+    real_index_bssid = 0
+    wps_list = {}
+
+    with open(OUTPUTPATH, 'r') as output_file:
+        for line in output_file.readlines():
+            count += 1
+            if 'BSSID' in line:
+                real_index_bssid = index_bssid
+                index_bssid = count
+
+    with open(OUTPUTPATH, 'r') as output_file:
+        networks = output_file.readlines()[real_index_bssid:index_bssid]
+
+    for line in networks:
+        line = cleanANSIcodes(line)
+        
+        real_elements = []
+        elements = line.split(' ')
+        if 'Quitting' in line:
+            continue
+
+        for element in elements:
+            if element != '' and element != '\n':
+                real_elements.append(element)
+        wps_list[ real_elements[0] ] = real_elements[-1].replace('Locke\n', 'Locke')
+    return wps_list
