@@ -31,6 +31,6 @@ else:
 
 if can_execute:
     nethunter.start( interface=interface, maxtimeout=airodump_timeout )
-    netmanager.start()
+    #netmanager.start()
     #wifite_attacker.start()
     

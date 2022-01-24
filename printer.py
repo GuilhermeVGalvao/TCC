@@ -26,7 +26,7 @@ STYLE = {
 
 ENDCOLOR = '\033[m'
 
-def dialog(*msg, color='white', style='default'):
+def dialog(*msg, color='white', style='default', end='\n'):
     if color not in COLORS.keys():
         color = 'white'
     if style not in style:
@@ -36,6 +36,10 @@ def dialog(*msg, color='white', style='default'):
     for element in msg:
         message += element + ' '
     message = message.strip()
+    final_message = COLORS[color] +'[*]'+ STYLE[style] +' '+ message +' '+ ENDCOLOR
 
-    print(COLORS[color] +'[*]'+ STYLE[style], message, ENDCOLOR)
+    print(final_message, end=end)
 
+    text = '[*] ' + message
+    styled_text = final_message
+    return (text, styled_text)

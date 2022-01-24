@@ -1,8 +1,10 @@
 #!/usr/bin/python3
 
 import os
+import sys
 import shutil
 import subprocess
+import threading
 from subprocess import Popen
 
 from printer import dialog
@@ -22,14 +24,20 @@ ARCHIVES_NAMES = (
 #Salva todas as redes capturadas pelo airodump em arquivos especiais na pasta
 #airodump-logs
 def start(interface = 'wlan0', maxtimeout=10):
-    checkdir()
+    #checkdir()
 
     haserror = False
 
-    output_file = open('airodump-logs-output.txt', 'w')
-    dialog('Iniciando busca por redes wi-fi...')
-    airodump = Popen( ['airodump-ng', interface, '--wps', '-w', 'airodump-logs'], stdin=subprocess.PIPE, stdout=output_file, stderr=subprocess.STDOUT )
+    initial_message = ''
+    initial_message += dialog('Iniciando busca por redes wi-fi...')[0]
+    airodump = Popen( ['airodump-ng', interface, '--wps'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
     
+    printer = threading.Thread(target=showoutput, args=[airodump, initial_message])
+    printer.start()
+    printer.join()
+
+    showoutput(airodump, initial_message)
+
     if airodump.stderr != None:
         print(airodump.stderr.read().decode())
         haserror = True
@@ -39,16 +47,11 @@ def start(interface = 'wlan0', maxtimeout=10):
         airodump.terminate()
     except KeyboardInterrupt as e:
         pass
-
-    output_file.close()
-
-    with open('airodump-logs-output.txt', 'r') as output_file:
-        print(output_file.read())
     
     if not haserror:
         dialog('Busca terminada!')
     
-    movefiles()
+    #movefiles()
     
 
 
@@ -90,3 +93,17 @@ def movefiles(path = LOGS_PATH, text_color='orange'):
         
     dialog('Arquivos salvos no diretório airodump-logs/', color='blue')    
 
+
+def showoutput(process, msg):
+    cont = True
+    old_lines_number = len(process.stdout.readlines())
+    new_lines_number = old_lines_number
+
+    for line in process.stdout:  # replace '' with b'' for Python 3
+        new_lines_number = len(process.stdout.readlines())
+        if new_lines_number != old_lines_number:
+            sys.stdout.write(msg+ line.decode())
+        else:
+            sys.stdout.write(' '*len(msg) + line.decode())
+        old_lines_number = len(process.stdout.readlines())
+        

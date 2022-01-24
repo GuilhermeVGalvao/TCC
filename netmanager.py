@@ -30,7 +30,8 @@ def start():
         shortdb.append( database[i]["bssid"]+' '+
         database[i]["essid"]+' '+
         str(database[i]["power"])+' '+
-        database[i]["privacity"])
+        database[i]["privacity"] +' '+
+        str(database[i]["wps"]))
 
         print( f'{database[i]["bssid"]:17}', end=' ')
         print( f'{database[i]["essid"]:32}', end=' ')
@@ -119,7 +120,7 @@ def get_wps_from_bssid(bssid):
     if bssid in WPS_NETWORKS_LIST.keys():
         return WPS_NETWORKS_LIST[bssid]
     else:
-        return 'Locke'
+        return 'Unknown'
     
 
 def cleanANSIcodes(text):
@@ -130,19 +131,22 @@ def cleanANSIcodes(text):
 
 def get_wps_networks_list():
     count = -1
-    index_bssid = 0
-    real_index_bssid = 0
+    end_bssid = 0
+    start_bssid = 0
     wps_list = {}
 
     with open(OUTPUTPATH, 'r') as output_file:
         for line in output_file.readlines():
             count += 1
             if 'BSSID' in line:
-                real_index_bssid = index_bssid
-                index_bssid = count
+                start_bssid = end_bssid
+                end_bssid = count
+
+    print('[START] >', start_bssid)
+    print('[END] >', end_bssid)
 
     with open(OUTPUTPATH, 'r') as output_file:
-        networks = output_file.readlines()[real_index_bssid:index_bssid]
+        networks = output_file.readlines()[start_bssid:end_bssid]
 
     for line in networks:
         line = cleanANSIcodes(line)
@@ -152,8 +156,11 @@ def get_wps_networks_list():
         if 'Quitting' in line:
             continue
 
+        
         for element in elements:
             if element != '' and element != '\n':
                 real_elements.append(element)
-        wps_list[ real_elements[0] ] = real_elements[-1].replace('Locke\n', 'Locke')
+        
+        if( len(real_elements) > 0 ):
+            wps_list[ real_elements[0] ] = real_elements[-1].replace('Locke\n', 'Locke')
     return wps_list
