@@ -119,7 +119,7 @@ def get_wps_from_bssid(bssid):
     if bssid in WPS_NETWORKS_LIST.keys():
         return WPS_NETWORKS_LIST[bssid]
     else:
-        return 'Locke'
+        return 'Unknown'
     
 
 def cleanANSIcodes(text):
@@ -155,5 +155,7 @@ def get_wps_networks_list():
         for element in elements:
             if element != '' and element != '\n':
                 real_elements.append(element)
-        wps_list[ real_elements[0] ] = real_elements[-1].replace('Locke\n', 'Locke')
+        
+        if( len(real_elements) > 0 ):
+            wps_list[ real_elements[0] ] = real_elements[-1].replace('Locke\n', 'Locke')
     return wps_list

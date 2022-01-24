@@ -27,5 +27,6 @@ def loaddb(file_name):
 
 
 def attack(net):
-    #wifite = Popen(['wifite', '-b', net["bssid"]], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
-    subprocess.run(['sh', '-c', 'wifite', '-b', net["bssid"]], shell=True)
+    
+    wifite = Popen(['wifite', '-b', net["bssid"]], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    #subprocess.run(['wifite', '-b', net["bssid"]], shell=True)
