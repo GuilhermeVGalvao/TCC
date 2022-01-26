@@ -188,8 +188,14 @@ airodump-logs-01.kismet.netxml
 airodump-logs-01.log.csv
 airodump-logs-output.txt
 
+hs/
+reaver_output.pcap
+cracked.json
+
+networks
 networks.txt
 networks.json
+cracked.json
 
 links_uteis.txt
 

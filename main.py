@@ -4,13 +4,29 @@ import nethunter
 import netmanager
 import netinvader
 import wifite_attacker
+from printer import dialog
 
 ### Variáveis Globais ###
 interface = ''
 airodump_timeout = 10
 can_execute = False
+key_to_networks_organization = 'beacons'
 
 args = sys.argv[:]
+
+### Função principal ###
+def start():
+    global interface, airodump_timeout
+    
+    has_an_error = nethunter.start( interface=interface, maxtimeout=airodump_timeout )
+    
+    if has_an_error:
+        dialog('OCORREU UM ERRO DURANTE A EXECUÇÃO DO AIRODUMP, ABORTANDO EXECUSSÃO!', color='lr')
+        return
+
+    #netmanager.start( key_to_networks_organization )
+    wifite_attacker.start()
+
 
 for i in range( len(args) ):
     if args[i] == '-t':
@@ -20,6 +36,10 @@ for i in range( len(args) ):
         except ValueError as e:
             print('Digite apenas valores de timeout válidos (números inteiros)')
         break
+    elif args[i] == '--organize-by-power':
+        key_to_networks_organization = 'power'
+    elif args[i] == '--organize-by-beacons':
+        key_to_networks_organization = 'beacons'
 
 if len(args) >= 2:
     interface = args.pop()
@@ -30,7 +50,5 @@ else:
 
 
 if can_execute:
-    nethunter.start( interface=interface, maxtimeout=airodump_timeout )
-    netmanager.start()
-    #wifite_attacker.start()
+    start()
     

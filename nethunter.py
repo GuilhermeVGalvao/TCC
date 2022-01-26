@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import os
+import re
 import shutil
 import subprocess
 from subprocess import Popen
@@ -27,41 +28,60 @@ def start(interface = 'wlan0', maxtimeout=10):
     haserror = False
 
     output_file = open('airodump-logs-output.txt', 'w')
-    dialog('Iniciando busca por redes wi-fi...')
+    dialog('Iniciando busca por redes wi-fi...', color='lb')
     airodump = Popen( ['airodump-ng', interface, '--wps', '-w', 'airodump-logs'], stdin=subprocess.PIPE, stdout=output_file, stderr=subprocess.STDOUT )
-    
-    if airodump.stderr != None:
-        print(airodump.stderr.read().decode())
-        haserror = True
+
     try:
         airodump.communicate(timeout=maxtimeout)
+        
+        if airodump.returncode != 0:
+            dialog('ERRO DURANTE A BUSCA POR REDES:', symbol_color='lr')
+            haserror = True
     except subprocess.TimeoutExpired as e:
         airodump.terminate()
     except KeyboardInterrupt as e:
         pass
 
     output_file.close()
-
+        
     with open('airodump-logs-output.txt', 'r') as output_file:
-        print(output_file.read())
+        if haserror:
+            print()
+            for line in output_file.readlines():
+                new_line = cleanANSIcodes(line).strip()
+
+                dialog('    ', new_line,color='w', style='bold', symbol_color='lr')
+            print()
+        else:
+            print(output_file.read())
     
     if not haserror:
-        dialog('Busca terminada!')
+        dialog('Busca terminada!', color='cian')
+        movefiles()
     
-    movefiles()
+    return haserror
+    
     
 
 
 def checkdir(path = LOGS_PATH):
     dialog('Verificando diretório de logs...')
     if os.path.isdir(path):
-        dialog('Diretório encontrado')
-        try:
-            dialog('Arquivos de log antigos foram encontrados')
-            dialog('Apagando arquivos de log antigos...')
+        dialog('Diretório encontrado', color='cian')
+
+        has_files = False
+        missing_files = []
+        for file in ARCHIVES_NAMES:
+            file_with_path = os.path.join( LOGS_PATH, file )
+            if os.path.isfile(file_with_path):
+                has_files = True
+        
+        if has_files:
+            dialog('Arquivos de log antigos encontrados')
+            dialog('Excluindo arquivos de log antigos...')
             del_oldlogs()
             dialog('Arquivos de log antigos apagados')
-        except FileNotFoundError as e:
+        else:
             dialog('Não foram encontrados arquivos de log antigos')
         return True
     else:
@@ -72,9 +92,15 @@ def checkdir(path = LOGS_PATH):
         return False
 
 
+def del_oldlog(file_name):
+    os.remove( os.path.join(LOGS_PATH, file_name) )
+
 def del_oldlogs():
     for archive in ARCHIVES_NAMES:
-        os.remove( os.path.join(LOGS_PATH, archive) )
+        try:
+            os.remove( os.path.join(LOGS_PATH, archive) )
+        except FileNotFoundError as e:
+            pass
 
 
 def movefiles(path = LOGS_PATH, text_color='orange'):
@@ -90,3 +116,8 @@ def movefiles(path = LOGS_PATH, text_color='orange'):
         
     dialog('Arquivos salvos no diretório airodump-logs/', color='blue')    
 
+
+def cleanANSIcodes(text):
+    ansi_remover = re.compile(r'(\x9B|\x1B\[)[0-?]*[ -\/]*[@-~]')
+    realtext = ansi_remover.sub('', text)
+    return realtext
