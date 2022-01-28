@@ -37,9 +37,9 @@ def start(key_to_organizate='power'):
         print( f'{database[i]["bssid"]:17}', end=' ')
         print( f'{database[i]["essid"]:32}', end=' ')
         print( f'{database[i]["power"]:6}', end=' ')
-        print( f'{database[i]["beacons"]:5}', end=' ')
+        print( f'{database[i]["beacons"]:7}', end=' ')
         print( f'{database[i]["privacity"]:10}', end=' ')
-        print( f'{database[i]["wps"]:8}')
+        print( f'{database[i]["wps"]:9}')
 
     dialog('Salvando base de dados...', color='orange')
     savedb(shortdb)

