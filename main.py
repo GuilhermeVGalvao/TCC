@@ -45,7 +45,11 @@ def start():
 def tester():
     global INTERFACE, AIRODUMP_TIMEOUT, CAN_EXECUTE, KEY_TO_NETWORKS_ORGANIZATION, PRINTS_DELAY
 
-    if len(args) >= 2:
+    if len(args) < 2:
+        helper()
+        CAN_EXECUTE = False
+        return CAN_EXECUTE
+    elif len(args) >= 2:
         INTERFACE = args.pop()
     else:
         print('INTERFACE de rede não foi expecificada')
