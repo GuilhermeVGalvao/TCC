@@ -7,7 +7,7 @@ import shutil
 import time
 import threading
 import subprocess
-from subprocess import CalledProcessError, Popen
+from subprocess import Popen
 
 from printer import dialog
 
