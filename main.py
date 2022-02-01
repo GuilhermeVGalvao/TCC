@@ -27,9 +27,16 @@ ARGS_LIST = [
 
 args = sys.argv[:]
 
-### Função principal ###
+def main():
+    global CAN_EXECUTE
+
+    tester()
+    if CAN_EXECUTE:
+        start()
+
+### Função que controla todo o programa ###
 def start():
-    global INTERFACE, AIRODUMP_TIMEOUT, PRINTS_DELAY
+    global INTERFACE, AIRODUMP_TIMEOUT, PRINTS_DELAY, CAN_EXECUTE, KEY_TO_NETWORKS_ORGANIZATION, PRINTS_DELAY
     
     has_an_error = nethunter.start( interface=INTERFACE, maxtimeout=AIRODUMP_TIMEOUT, delay=PRINTS_DELAY )
     
@@ -221,7 +228,6 @@ def helper(color='blue', symbol_color='blue'):
     dialog(f'                                   automaticamente após 20 segundos', color='white', symbol_color=symbol_color) 
     dialog(f'', color=color)
 
-tester()
-if CAN_EXECUTE:
-    start()
-    
+
+if __name__ == '__main__':
+    main()
