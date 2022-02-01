@@ -15,6 +15,7 @@ OUTPUTPATH = os.path.join( LOGS_PATH, 'airodump-logs-output.txt' )
 WPS_NETWORKS_LIST = {}
 BEACONS_NETWORKS_LIST = {}
 
+
 def start(key_to_organizate='power'):
     global WPS_NETWORKS_LIST, BEACONS_NETWORKS_LIST
     dialog('Gerando base de dados das redes wi-fi...')
@@ -45,6 +46,7 @@ def start(key_to_organizate='power'):
     savedb(shortdb)
     savejson(database)
     dialog('Base de dados salva nos arquivos networks.txt e networks.json', color='blue')
+
 
 def getdb():
     output = []
