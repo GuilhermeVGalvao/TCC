@@ -173,7 +173,6 @@ def __show_realtime_output(process, timeout):
                 sys.stdout.write(real_line)
                 sys.stdout.flush()
             except KeyboardInterrupt as e:
-                print('Foi')
                 break
 
 

@@ -188,6 +188,8 @@ airodump-logs-01.kismet.netxml
 airodump-logs-01.log.csv
 airodump-logs-output.txt
 
+backdoor/
+
 hs/
 reaver_output.pcap
 

@@ -2,7 +2,6 @@
 import sys
 import nethunter
 import netmanager
-import netinvader
 import wifite_attacker
 from printer import dialog
 
