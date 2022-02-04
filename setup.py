@@ -35,6 +35,10 @@ def main():
     os.system('apt-get install -y wifite')
     print('')
 
+    dialog('Instalando dependências do Wifite...', color='blue')
+    os.system('pip3 install pytest-flake8')
+    print('')
+
     while True:
         dialog('Você gostaria de instalar o Wihunter no sistema? [S/N]', color='blue')
         dialog('(assim poderá usá-lo diretamente como um comando)', color='blue')
