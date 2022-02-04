@@ -11,7 +11,7 @@ AIRODUMP_TIMEOUT = 10
 CAN_EXECUTE = True
 KEY_TO_NETWORKS_ORGANIZATION = 'beacons'
 PRINTS_DELAY = 0
-KILL_ANOTHER_PROCESS = None
+KILL_ANOTHER_PROCESSES = None
 
 ARGS_LIST = [
     '-t', 
@@ -37,7 +37,7 @@ def main():
 
 ### Função que controla todo o programa ###
 def start():
-    global INTERFACE, AIRODUMP_TIMEOUT, PRINTS_DELAY, CAN_EXECUTE, KEY_TO_NETWORKS_ORGANIZATION, PRINTS_DELAY, KILL_ANOTHER_PROCESS
+    global INTERFACE, AIRODUMP_TIMEOUT, PRINTS_DELAY, CAN_EXECUTE, KEY_TO_NETWORKS_ORGANIZATION, PRINTS_DELAY, KILL_ANOTHER_PROCESSES
     
     has_an_error = nethunter.start( interface=INTERFACE, maxtimeout=AIRODUMP_TIMEOUT, delay=PRINTS_DELAY )
     
@@ -47,10 +47,10 @@ def start():
         return
 
     netmanager.start( KEY_TO_NETWORKS_ORGANIZATION )
-    wifite_attacker.start( KILL_ANOTHER_PROCESS )
+    wifite_attacker.start( KILL_ANOTHER_PROCESSES )
 
 def tester():
-    global INTERFACE, AIRODUMP_TIMEOUT, CAN_EXECUTE, KEY_TO_NETWORKS_ORGANIZATION, PRINTS_DELAY, KILL_ANOTHER_PROCESS
+    global INTERFACE, AIRODUMP_TIMEOUT, CAN_EXECUTE, KEY_TO_NETWORKS_ORGANIZATION, PRINTS_DELAY, KILL_ANOTHER_PROCESSES
 
     w = '\033[0m'
     o = '\033[93m'
@@ -127,7 +127,7 @@ def tester():
             continue
         elif '--kill' in args:
             i = args.index('--kill')
-            KILL_ANOTHER_PROCESS = True
+            KILL_ANOTHER_PROCESSES = True
             args.pop(i)
             continue
         elif '-d' in args or '--delay' in args:
