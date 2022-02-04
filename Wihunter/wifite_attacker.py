@@ -231,7 +231,6 @@ def __wpa_wps_attack(net, kill=False, wordlist=None):
 
 
 def __wpa_attack(net, kill=False, wordlist=None):
-    
     if kill:
         if wordlist is not None:
             wifite = Popen(['wifite', 'w', wordlist,'--kill', '-wpa', '-b', net["bssid"]], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=0, universal_newlines=True)
