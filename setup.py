@@ -59,6 +59,8 @@ def main():
         os.system('python3 installer.py')
     else:
         os.system('chmod +x wihunter.py')
+    os.system('chmod +x uninstall.py')
+    
     dialog('INSTALAÇÃO CONCLUÍDA!', color='orange')
 
     # dialog('Baixando Xerosploit...', color='blue')
