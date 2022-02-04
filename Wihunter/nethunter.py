@@ -103,6 +103,7 @@ def checkdir(path = LOGS_PATH, delay=0):
 def del_oldlog(file_name):
     os.remove( os.path.join(LOGS_PATH, file_name) )
 
+
 def del_oldlogs():
     for archive in ARCHIVES_NAMES:
         try:
