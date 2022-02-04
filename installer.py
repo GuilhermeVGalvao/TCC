@@ -18,5 +18,6 @@ def main():
     # Set execute permission in wihunter
     os.system('chmod +x /usr/bin/wihunter')
 
+
 if __name__ == '__main__':
     main()
