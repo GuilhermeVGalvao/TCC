@@ -23,4 +23,4 @@
 ###                                                                          ###
 ################################################################################
 
-python3 /opt/Wihunter/wihunter.py "$@"
+python3 /opt/wihunter/wihunter.py "$@"
