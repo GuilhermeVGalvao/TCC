@@ -38,14 +38,17 @@ PRINTS_DELAY = 0
 KILL_ANOTHER_PROCESSES = None
 
 ARGS_LIST = [
-    '-t', 
-    '--timeout',
     '-d',
     '--delay',
+    '--kill',
     '-m',
     '--manual-control',
-    '--organize-by-power',
     '--organize-by-beacons', 
+    '--organize-by-power',
+    '-t', 
+    '--timeout',
+    '-w',
+    '--word-list',
     '-h',
     '--help'
 ]
@@ -203,32 +206,32 @@ def tester():
             return CAN_EXECUTE
 
 
+w = '\033[0m'
+o = '\033[93m'
+b = '\033[94m'
+e = '\033[m'
+c = '\033[92m'
+r = '\033[91m'
+lr = '\033[31m'
+
 def helper(color='blue', symbol_color='blue'):
-    w = '\033[0m'
-    o = '\033[93m'
-    b = '\033[94m'
-    e = '\033[m'
-    c = '\033[92m'
-    r = '\033[91m'
-    lr = '\033[31m'
 
     dialog(f'[MANUAL DO USUÁRIO]', color='blue')
     dialog(f'', color='blue')
     dialog(f'ARGUMENTOS', color='blue')
     dialog(f'----------', color='blue')
     dialog(f'', color='blue')
-    dialog(f'{c}-t{b} ou {c}--timeout{b} : Insere de maneira explícita um valor de timeout', color=color)
-    dialog(f'                  em segundos para a procura por redes wi-fi com', color=color)
-    dialog(f'                  o Airodump', color=color)
-    dialog(f'                  <{w}int{c}> É preciso ser um valor inteiro maior que 5', color='cian', symbol_color=symbol_color)
-    dialog(f'', color=color)
-    dialog(f'                  Ex.: sudo ./main.py {o}-t 20{b} wlan0', color=color, symbol_color=symbol_color)
-    dialog(f'                       sudo ./main.py {o}--timeoutt 20{b} wlan0', color=color, symbol_color=symbol_color)
-    dialog(f'                                      -------------', color=color)
-    dialog(f'                                   A busca por redes wi-fi será abortada', color='white', symbol_color=symbol_color)
-    dialog(f'                                   automaticamente após 20 segundos', color='white', symbol_color=symbol_color) 
-    dialog(f'', color=color)
 
+    show_delay_help( color=color, symbol_color=symbol_color )
+    show_kill_help( color=color, symbol_color=symbol_color )
+    show_manual_control_help( color=color, symbol_color=symbol_color )
+    show_organize_by_beacons_help( color=color, symbol_color=symbol_color )
+    show_organize_by_power_help( color=color, symbol_color=symbol_color )
+    show_timeout_help( color=color, symbol_color=symbol_color )
+    show_help( color=color, symbol_color=symbol_color )
+
+
+def show_delay_help(color='white', symbol_color='white'):
     dialog(f"{c}-d{b} ou {c}--delay{b} : Insere um valor de delay entre as saídas ({w}print's{b})", color=color)
     dialog(f"                do programa", color=color)
     dialog(f'', color=color)
@@ -247,6 +250,26 @@ def helper(color='blue', symbol_color='blue'):
     dialog(f'                                 anterior', color='white', symbol_color=symbol_color) 
     dialog(f'', color=color)
 
+
+def show_kill_help(color='white', symbol_color='white'):
+    dialog(f'{c}--kill{b} : Mata processos em conflito com o Wifite', color=color)
+    dialog(f'', color=color)
+    dialog(f'         Durante o ataque às redes Wi-fi, alguns', color=color)
+    dialog(f'         processos podem entrar em conflito com o', color=color)
+    dialog(f'         Wifite e causar instabilidades; caso isso ocorra,', color=color)
+    dialog(f'         use essa opção para matar todos os processos que', color=color)
+    dialog(f'         possam estar causando conflito', color=color)
+    dialog(f'', color=color)
+    dialog(f'                  Ex.: sudo ./main.py {o}--kill{b} wlan0', color=color, symbol_color=symbol_color)
+    dialog(f'                                      ------', color=color)
+    dialog(f'                                   O programa matará todos os', color='white', symbol_color=symbol_color)
+    dialog(f'                                   processos que possam entrar', color='white', symbol_color=symbol_color)
+    dialog(f'                                   em conflito com o Wifite', color='white', symbol_color=symbol_color)
+    dialog(f'                                   durante a sequência de ataques', color='white', symbol_color=symbol_color)
+    dialog(f'', color=color)
+
+
+def show_manual_control_help(color='white', symbol_color='white'):
     dialog(f'{c}-m{b} ou {c}--manual-control{b} : A busca por redes wi-fi com o Airodump', color=color)
     dialog(f'                         deixará de ter valor de timeout e será', color=color)
     dialog(f'                         controlada manualmente, parando apenas', color=color)
@@ -260,24 +283,8 @@ def helper(color='blue', symbol_color='blue'):
     dialog(f'                                   CTRL + C', color='white', symbol_color=symbol_color) 
     dialog(f'', color=color)
 
-    dialog(f'{c}--organize-by-power{b} : Ordena ao programa que organize as redes', color=color)
-    dialog(f'                      a serem atacadas por ordem de "power"', color=color)
-    dialog(f'                      (ou potência do sinal)', color=color)
-    dialog(f'', color=color)
-    dialog(f'                      O driver de algumas interfaces de rede', color=color)
-    dialog(f'                      pode não ser compatível com essa opção', color=color)
-    dialog(f'                      ou apresentar mal funcionamento, nesse caso,', color=color)
-    dialog(f'                      recomenda-se o uso do argumento', color=color)
-    dialog(f'                      "--organize-by-beacons"', color=color)
-    dialog(f'', color=color)
-    dialog(f'                  Ex.: sudo ./main.py {o}--organize-by-power{b} wlan0', color=color, symbol_color=symbol_color)
-    dialog(f'                                      -------------------', color=color)
-    dialog(f'                                   O programa dará preferência a', color='white', symbol_color=symbol_color)
-    dialog(f'                                   programas com maior "power"', color='white', symbol_color=symbol_color)
-    dialog(f'                                   (ou potência do sinal) no', color='white', symbol_color=symbol_color) 
-    dialog(f'                                   momento de atacar', color='white', symbol_color=symbol_color) 
-    dialog(f'', color=color)
 
+def show_organize_by_beacons_help(color='white', symbol_color='white'):
     dialog(f'{c}--organize-by-beacons{b} : Ordena ao programa que organize as redes', color=color)
     dialog(f'                        a serem atacadas por ordem de "beacons', color=color)
     dialog(f'                        encontrados"', color=color)
@@ -297,22 +304,41 @@ def helper(color='blue', symbol_color='blue'):
     dialog(f'                                   de atacar', color='white', symbol_color=symbol_color) 
     dialog(f'', color=color)
 
-    dialog(f'{c}--kill{b} : Mata processos em conflito com o Wifite', color=color)
+
+def show_organize_by_power_help(color='white', symbol_color='white'):
+    dialog(f'{c}--organize-by-power{b} : Ordena ao programa que organize as redes', color=color)
+    dialog(f'                      a serem atacadas por ordem de "power"', color=color)
+    dialog(f'                      (ou potência do sinal)', color=color)
     dialog(f'', color=color)
-    dialog(f'         Durante o ataque às redes Wi-fi, alguns', color=color)
-    dialog(f'         processos podem entrar em conflito com o', color=color)
-    dialog(f'         Wifite e causar instabilidades; caso isso ocorra,', color=color)
-    dialog(f'         use essa opção para matar todos os processos que', color=color)
-    dialog(f'         possam estar causando conflito', color=color)
+    dialog(f'                      O driver de algumas interfaces de rede', color=color)
+    dialog(f'                      pode não ser compatível com essa opção', color=color)
+    dialog(f'                      ou apresentar mal funcionamento, nesse caso,', color=color)
+    dialog(f'                      recomenda-se o uso do argumento', color=color)
+    dialog(f'                      "--organize-by-beacons"', color=color)
     dialog(f'', color=color)
-    dialog(f'                  Ex.: sudo ./main.py {o}--kill{b} wlan0', color=color, symbol_color=symbol_color)
-    dialog(f'                                      ------', color=color)
-    dialog(f'                                   O programa matará todos os', color='white', symbol_color=symbol_color)
-    dialog(f'                                   processos que possam entrar', color='white', symbol_color=symbol_color)
-    dialog(f'                                   em conflito com o Wifite', color='white', symbol_color=symbol_color)
-    dialog(f'                                   durante a sequência de ataques', color='white', symbol_color=symbol_color)
+    dialog(f'                  Ex.: sudo ./main.py {o}--organize-by-power{b} wlan0', color=color, symbol_color=symbol_color)
+    dialog(f'                                      -------------------', color=color)
+    dialog(f'                                   O programa dará preferência a', color='white', symbol_color=symbol_color)
+    dialog(f'                                   programas com maior "power"', color='white', symbol_color=symbol_color)
+    dialog(f'                                   (ou potência do sinal) no', color='white', symbol_color=symbol_color) 
+    dialog(f'                                   momento de atacar', color='white', symbol_color=symbol_color) 
     dialog(f'', color=color)
 
+
+def show_timeout_help(color='white', symbol_color='white'):
+    dialog(f'{c}-t{b} ou {c}--timeout{b} : Insere de maneira explícita um valor de timeout', color=color)
+    dialog(f'                  em segundos para a procura por redes wi-fi com', color=color)
+    dialog(f'                  o Airodump', color=color)
+    dialog(f'                  <{w}int{c}> É preciso ser um valor inteiro maior que 5', color='cian', symbol_color=symbol_color)
+    dialog(f'', color=color)
+    dialog(f'                  Ex.: sudo ./main.py {o}-t 20{b} wlan0', color=color, symbol_color=symbol_color)
+    dialog(f'                       sudo ./main.py {o}--timeoutt 20{b} wlan0', color=color, symbol_color=symbol_color)
+    dialog(f'                                      -------------', color=color)
+    dialog(f'                                   A busca por redes wi-fi será abortada', color='white', symbol_color=symbol_color)
+    dialog(f'                                   automaticamente após 20 segundos', color='white', symbol_color=symbol_color) 
+    dialog(f'', color=color)
+
+def show_help(color='white', symbol_color='white'):
     dialog(f'{c}-h{b} ou {c}--help{b} : Exibe o manual de ajuda do usuário', color=color)
     dialog(f'', color=color)
     dialog(f'                  Ex.: sudo ./main.py {o}-h{b} wlan0', color=color, symbol_color=symbol_color)
