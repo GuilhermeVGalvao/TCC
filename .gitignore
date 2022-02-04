@@ -189,7 +189,7 @@ airodump-logs-01.log.csv
 airodump-logs-output.txt
 
 backdoor/
-xerosploit-installation-files/
+xerosploit-installation-files
 
 hs/
 reaver_output.pcap
