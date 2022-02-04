@@ -113,6 +113,8 @@ def del_oldlogs():
 
 
 def movefiles(path = LOGS_PATH, text_color='orange', delay=0):
+    global LOGS_PATH, ARCHIVES_NAMES, CURRENT_PATH
+    
     dialog('Salvando arquivos de log...')
     for archive in ARCHIVES_NAMES:
         try:
@@ -123,7 +125,7 @@ def movefiles(path = LOGS_PATH, text_color='orange', delay=0):
         except FileNotFoundError as e:
             dialog('Ocorreu algum erro, os arquivos de log não foram movidos', color='red', delay=delay)
         
-    dialog('Arquivos salvos no diretório airodump-logs/', color='blue', delay=delay)
+    dialog(f'Arquivos salvos no diretório {CURRENT_PATH}/airodump-logs/', color='blue', delay=delay)
 
 
 def airodump_test(interface):
