@@ -194,6 +194,7 @@ def tester():
             CAN_EXECUTE = False
             return CAN_EXECUTE
 
+
 def helper(color='blue', symbol_color='blue'):
     w = '\033[0m'
     o = '\033[93m'
