@@ -1,39 +1,22 @@
 #!/usr/bin/python3
 
 import os
-import sys
-from printer import dialog
-
-CURRENT_PATH = os.getcwd()
 
 def main():
-    global CURRENT_PATH
+    # Make program directory
+    os.makedirs( '/opt/wihunter' )
 
-    lr = '\033[31m'
+    # Copy files to Wihunter's directory
+    os.system('cp wihunter.py /opt/wihunter/')
+    os.system('cp printer.py /opt/wihunter/')
+    os.system('cp -r Wihunter /opt/wihunter/')
+    os.system('cp uninstall.py /opt/wihunter/')
 
-    if not os.getuid() == 0:
-        sys.exit(f'{lr}[*] O instalador deve ser executado como superusuário!')
-    
-    dialog('Atualizando repositórios do sistema...', color='blue')
-    os.system('apt-get update -y')
+    # Copy the .sh executable to /usr/bin
+    os.system('cp wihunter.sh /usr/bin/wihunter')
 
-    dialog('Instalando git...', color='blue')
-    os.system('apt-get install -y git')
+    # Set execute permission in wihunter
+    os.system('chmod +x /usr/bin/wihunter')
 
-    dialog('Instalando aircrack-ng...', color='blue')
-    os.system('apt-get install -y aircrack-ng')
-
-    dialog('Instalando Wifite...', color='blue')
-    os.system('apt-get install -y wifite')
-
-    dialog('Baixando Xerosploit...', color='blue')
-    os.system('git clone https://github.com/LionSec/xerosploit')
-    dialog('iniciando instalação...', color='blue')
-    os.system('cp xerosploit-installation-files/xerosploit-installer2-to-3.py xerosploit/install.py')
-    os.system('python xerosploit/install.py')
-    os.system('cp xerosploit-installation-files/xerosploit-python2-to-3.py xerosploit/xerosploit.py')
-    os.system('cp xerosploit-installation-files/xerosploit-python2-to-3.py /opt/xerosploit/xerosploit.py')
-
-
-
-main()
+if __name__ == '__main__':
+    main()

@@ -5,17 +5,21 @@ import sys
 from printer import dialog
 
 CURRENT_PATH = os.getcwd()
+INSTALL = False
 
 def main():
-    global CURRENT_PATH
+    global CURRENT_PATH, INSTALL
 
     lr = '\033[31m'
 
     if not os.getuid() == 0:
-        sys.exit(f'{lr}[*] O instalador deve ser executado como superusuário!')
+        sys.exit(f'{lr}[*] O Setup deve ser executado como superusuário!')
     
     dialog('Atualizando repositórios do sistema...', color='blue')
     os.system('apt-get update -y')
+
+    dialog('Instalando Python3...', color='blue')
+    os.system('apt-get install -y python3')
 
     dialog('Instalando git...', color='blue')
     os.system('apt-get install -y git')
@@ -26,13 +30,35 @@ def main():
     dialog('Instalando Wifite...', color='blue')
     os.system('apt-get install -y wifite')
 
-    dialog('Baixando Xerosploit...', color='blue')
-    os.system('git clone https://github.com/LionSec/xerosploit')
-    dialog('iniciando instalação...', color='blue')
-    os.system('cp xerosploit-installation-files/xerosploit-installer2-to-3.py xerosploit/install.py')
-    os.system('python xerosploit/install.py')
-    os.system('cp xerosploit-installation-files/xerosploit-python2-to-3.py xerosploit/xerosploit.py')
-    os.system('cp xerosploit-installation-files/xerosploit-python2-to-3.py /opt/xerosploit/xerosploit.py')
+    while True:
+        dialog('Você gostaria de instalar o Wihunter no sistema? [S/N]', color='blue')
+        dialog('(assim poderá usá-lo diretamente como um comando)', color='blue')
+        answer = input('>> ').upper()
+
+        if answer == 'S':
+            INSTALL = True
+            break
+        elif answer == 'N':
+            INSTALL = False
+            break
+        else:
+            print('')
+            dialog('Por favor digite apenas "S" ou "N" !!', color='lr')
+            print('')
+
+    if INSTALL:
+        os.system('python3 install.py')
+    else:
+        os.system('chmod +x wihunter.py')
+    dialog('INSTALAÇÃO CONCLUÍDA!', color='orange')
+
+    # dialog('Baixando Xerosploit...', color='blue')
+    # os.system('git clone https://github.com/LionSec/xerosploit')
+    # dialog('iniciando instalação...', color='blue')
+    # os.system('cp xerosploit-installation-files/xerosploit-installer2-to-3.py xerosploit/install.py')
+    # os.system('python xerosploit/install.py')
+    # os.system('cp xerosploit-installation-files/xerosploit-python2-to-3.py xerosploit/xerosploit.py')
+    # os.system('cp xerosploit-installation-files/xerosploit-python2-to-3.py /opt/xerosploit/xerosploit.py')
 
 
 
