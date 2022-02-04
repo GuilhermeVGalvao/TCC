@@ -52,7 +52,7 @@ def main():
             print('')
 
     if INSTALL:
-        os.system('python3 install.py')
+        os.system('python3 installer.py')
     else:
         os.system('chmod +x wihunter.py')
     dialog('INSTALAÇÃO CONCLUÍDA!', color='orange')
