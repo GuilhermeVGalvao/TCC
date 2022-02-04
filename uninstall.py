@@ -9,5 +9,6 @@ def main():
     # Del the .sh executable in /usr/bin
     os.system('rm -f /usr/bin/wihunter')
 
+
 if __name__ == '__main__':
     main()
