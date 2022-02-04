@@ -105,6 +105,14 @@ def tester():
         if '-m' in args and '--manual-control' in args:
             CAN_EXECUTE = False
             return CAN_EXECUTE
+
+        if '-m' in args and '-t' in args:
+            CAN_EXECUTE = False
+            return CAN_EXECUTE
+
+        if '--timeout' in args and '--manual-control' in args:
+            CAN_EXECUTE = False
+            return CAN_EXECUTE
         
         if '-d' in args and '--delay' in args:
             CAN_EXECUTE = False
