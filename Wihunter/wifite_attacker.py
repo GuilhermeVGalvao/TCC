@@ -11,6 +11,7 @@ from printer import show_wep_menu
 from printer import show_wpa_menu
 from printer import show_wpa_wps_menu
 
+CURRENT_PATH = os.getcwd()
 
 def start(database_file='networks.json', kill=False):
     dialog('== Iniciando ataques ==', color='p')    
@@ -23,11 +24,12 @@ def start(database_file='networks.json', kill=False):
 
 
 def __loaddb(file_name):
+    file_path = os.path.join( CURRENT_PATH, file_name )
     db = {}
 
     dialog('Carregando redes para a base de dados...', color='c')
-    if os.path.exists(file_name):
-        with open(file_name, 'r') as file:
+    if os.path.exists(file_path):
+        with open(file_path, 'r') as file:
             db = json.load(file)
     else:
         raise FileNotFoundError("[*] Erro Fatal: arquivo "+file_name+" não encontrado")

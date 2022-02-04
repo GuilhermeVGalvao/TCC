@@ -180,6 +180,8 @@ cython_debug/
 # End of https://www.toptal.com/developers/gitignore/api/python,visualstudiocode
 
 ### MY LIST OF "TO IGNORE" ITEMS ###
+Wihunter/airodump-logs/
+
 airodump-logs/
 airodump-logs-01.cap
 airodump-logs-01.csv

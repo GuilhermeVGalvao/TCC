@@ -1,9 +1,10 @@
 #!/usr/bin/python3
+
 import sys
-import nethunter
-import netmanager
-import wifite_attacker
-from printer import dialog
+from  Wihunter import nethunter
+from  Wihunter import netmanager
+from  Wihunter import wifite_attacker
+from  printer import dialog
 
 ################################################################################
 ###                                                                          ###
@@ -70,7 +71,7 @@ def start():
         return
 
     netmanager.start( KEY_TO_NETWORKS_ORGANIZATION )
-    wifite_attacker.start( KILL_ANOTHER_PROCESSES )
+    wifite_attacker.start( kill=KILL_ANOTHER_PROCESSES )
 
 def tester():
     global INTERFACE, AIRODUMP_TIMEOUT, CAN_EXECUTE, KEY_TO_NETWORKS_ORGANIZATION, PRINTS_DELAY, KILL_ANOTHER_PROCESSES
