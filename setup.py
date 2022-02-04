@@ -17,18 +17,23 @@ def main():
     
     dialog('Atualizando repositórios do sistema...', color='blue')
     os.system('apt-get update -y')
+    print('')
 
     dialog('Instalando Python3...', color='blue')
     os.system('apt-get install -y python3')
+    print('')
 
     dialog('Instalando git...', color='blue')
     os.system('apt-get install -y git')
+    print('')
 
     dialog('Instalando aircrack-ng...', color='blue')
     os.system('apt-get install -y aircrack-ng')
+    print('')
 
     dialog('Instalando Wifite...', color='blue')
     os.system('apt-get install -y wifite')
+    print('')
 
     while True:
         dialog('Você gostaria de instalar o Wihunter no sistema? [S/N]', color='blue')
