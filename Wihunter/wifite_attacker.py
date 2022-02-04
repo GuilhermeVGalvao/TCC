@@ -20,7 +20,6 @@ def start(database_file='networks.json', kill=False):
     del database[0]
 
     attack(database[:])
-    
 
 
 def __loaddb(file_name):
