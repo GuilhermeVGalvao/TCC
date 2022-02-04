@@ -57,11 +57,12 @@ def main():
 
     if INSTALL:
         os.system('python3 installer.py')
+        dialog('INSTALAÇÃO CONCLUÍDA!', color='orange')
+        dialog('Teste "wihunter" no seu terminal', color='cian')
     else:
         os.system('chmod +x wihunter.py')
+        dialog('INSTALAÇÃO CONCLUÍDA!', color='orange')
     os.system('chmod +x uninstall.py')
-    
-    dialog('INSTALAÇÃO CONCLUÍDA!', color='orange')
 
     # dialog('Baixando Xerosploit...', color='blue')
     # os.system('git clone https://github.com/LionSec/xerosploit')
