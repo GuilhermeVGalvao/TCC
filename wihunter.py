@@ -73,6 +73,7 @@ def start():
     netmanager.start( KEY_TO_NETWORKS_ORGANIZATION )
     wifite_attacker.start( kill=KILL_ANOTHER_PROCESSES )
 
+
 def tester():
     global INTERFACE, AIRODUMP_TIMEOUT, CAN_EXECUTE, KEY_TO_NETWORKS_ORGANIZATION, PRINTS_DELAY, KILL_ANOTHER_PROCESSES
 
