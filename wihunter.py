@@ -37,6 +37,7 @@ CAN_EXECUTE = True
 KEY_TO_NETWORKS_ORGANIZATION = 'beacons'
 PRINTS_DELAY = 0
 KILL_ANOTHER_PROCESSES = None
+WORDLIST = None
 
 ARGS_LIST = [
     '-d',
@@ -76,11 +77,12 @@ def start():
         return
 
     netmanager.start( KEY_TO_NETWORKS_ORGANIZATION )
-    wifite_attacker.start( kill=KILL_ANOTHER_PROCESSES )
+    wifite_attacker.start( kill=KILL_ANOTHER_PROCESSES, wordlist=WORDLIST )
 
 
 def tester():
-    global INTERFACE, AIRODUMP_TIMEOUT, CAN_EXECUTE, KEY_TO_NETWORKS_ORGANIZATION, PRINTS_DELAY, KILL_ANOTHER_PROCESSES
+    global INTERFACE, AIRODUMP_TIMEOUT, CAN_EXECUTE, KEY_TO_NETWORKS_ORGANIZATION
+    global PRINTS_DELAY, KILL_ANOTHER_PROCESSES, WORDLIST
 
     w = '\033[0m'
     o = '\033[93m'
@@ -185,6 +187,26 @@ def tester():
                 dialog('Em caso de dúvida, use o argumento "-h" ou "--help"', color='cian')
                 CAN_EXECUTE = False
                 return CAN_EXECUTE
+            except IndexError as e:
+                dialog('VALOR DE DELAY NÃO ESPECIFICADO!', color='lr')
+                dialog('Digite apenas valores de delay válidos (números reais positivos)', color='lr')
+                dialog('Em caso de dúvida, use o argumento "-h" ou "--help"', color='cian')
+                CAN_EXECUTE = False
+                return CAN_EXECUTE
+        elif '-w' in args or '--wordlist' in args:
+            if '-w' in args:
+                i = args.index('-w')
+            else:
+                i = args.index('--wordlist')
+            try:
+                wordlist = args[i+1]
+
+                if os.path.isfile(wordlist):
+                    WORDLIST = wordlist
+                else:
+                    dialog('Erro: arquivo ou diretório de wordlist não existe', color='lr')
+                    CAN_EXECUTE = False
+                    return CAN_EXECUTE
             except IndexError as e:
                 dialog('VALOR DE DELAY NÃO ESPECIFICADO!', color='lr')
                 dialog('Digite apenas valores de delay válidos (números reais positivos)', color='lr')
