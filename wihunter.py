@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import os
 import sys
 from  Wihunter import nethunter
 from  Wihunter import netmanager
@@ -47,6 +48,7 @@ ARGS_LIST = [
     '--organize-by-power',
     '-t', 
     '--timeout',
+    '--uninstall',
     '-w',
     '--word-list',
     '-h',
@@ -189,6 +191,24 @@ def tester():
                 dialog('Em caso de dúvida, use o argumento "-h" ou "--help"', color='cian')
                 CAN_EXECUTE = False
                 return CAN_EXECUTE
+        elif '--uninstall' in args:
+            if os.path.exists('/opt/wihunter/uninstall.py'):
+                dialog('Deseja realmente desinstalar o Wihunter? (S/N)', color='lr')
+                answer = input('>> ').upper()
+
+                if answer == 'S':
+                    os.system('python3 /opt/wihunter/uninstall.py')
+                    os.exit('')
+                elif answer == 'N':
+                    dialog('Desinstalação cancelada!', color='white')
+                    os.exit('')
+                else:
+                    dialog('Por favor digite apenas "S" ou "N"', color='white')
+                    os.exit('')
+            else:
+                dialog('Wihunter não está instalado no sistema')
+                dialog('para ser desinstalado')
+                os.exit('')
         elif '-h' in args or '--help' in args:
             helper()
             CAN_EXECUTE = False
@@ -228,6 +248,7 @@ def helper(color='blue', symbol_color='blue'):
     show_organize_by_beacons_help( color=color, symbol_color=symbol_color )
     show_organize_by_power_help( color=color, symbol_color=symbol_color )
     show_timeout_help( color=color, symbol_color=symbol_color )
+    show_wordlist_help( color=color, symbol_color=symbol_color )
     show_help( color=color, symbol_color=symbol_color )
 
 
@@ -242,9 +263,9 @@ def show_delay_help(color='white', symbol_color='white'):
     dialog(f'                maior ou igual a 0', color='cian', symbol_color=symbol_color)
     dialog(f'                É recomendado um valor entre zero e no máximo 2', color='cian', symbol_color=symbol_color)
     dialog(f'', color=color)
-    dialog(f'                Ex.: sudo ./main.py {o}-d 0.2{b} wlan0', color=color, symbol_color=symbol_color)
-    dialog(f'                     sudo ./main.py {o}--delay 0.2{b} wlan0', color=color, symbol_color=symbol_color)
-    dialog(f'                                    -----------', color=color)
+    dialog(f'                Ex.: sudo wihunter {o}-d 0.2{b} wlan0', color=color, symbol_color=symbol_color)
+    dialog(f'                     sudo wihunter {o}--delay 0.2{b} wlan0', color=color, symbol_color=symbol_color)
+    dialog(f'                                   -----------', color=color)
     dialog(f'                                 Cada saída terá um delay 0.2', color='white', symbol_color=symbol_color)
     dialog(f'                                 segundos em relação à saída', color='white', symbol_color=symbol_color)
     dialog(f'                                 anterior', color='white', symbol_color=symbol_color) 
@@ -260,8 +281,8 @@ def show_kill_help(color='white', symbol_color='white'):
     dialog(f'         use essa opção para matar todos os processos que', color=color)
     dialog(f'         possam estar causando conflito', color=color)
     dialog(f'', color=color)
-    dialog(f'                  Ex.: sudo ./main.py {o}--kill{b} wlan0', color=color, symbol_color=symbol_color)
-    dialog(f'                                      ------', color=color)
+    dialog(f'                  Ex.: sudo wihunter {o}--kill{b} wlan0', color=color, symbol_color=symbol_color)
+    dialog(f'                                     ------', color=color)
     dialog(f'                                   O programa matará todos os', color='white', symbol_color=symbol_color)
     dialog(f'                                   processos que possam entrar', color='white', symbol_color=symbol_color)
     dialog(f'                                   em conflito com o Wifite', color='white', symbol_color=symbol_color)
@@ -275,9 +296,9 @@ def show_manual_control_help(color='white', symbol_color='white'):
     dialog(f'                         controlada manualmente, parando apenas', color=color)
     dialog(f'                         quando o usuário apertar CTRL + C', color=color)
     dialog(f'', color=color)
-    dialog(f'                  Ex.: sudo ./main.py {o}-m{b} wlan0', color=color, symbol_color=symbol_color)
-    dialog(f'                       sudo ./main.py {o}--manual-control{b} wlan0', color=color, symbol_color=symbol_color)
-    dialog(f'                                      ----------------', color=color)
+    dialog(f'                  Ex.: sudo wihunter {o}-m{b} wlan0', color=color, symbol_color=symbol_color)
+    dialog(f'                       sudo wihunter {o}--manual-control{b} wlan0', color=color, symbol_color=symbol_color)
+    dialog(f'                                     ----------------', color=color)
     dialog(f'                                   A busca por redes wi-fi é infinita', color='white', symbol_color=symbol_color)
     dialog(f'                                   e só parará quando o usuário apertar', color='white', symbol_color=symbol_color) 
     dialog(f'                                   CTRL + C', color='white', symbol_color=symbol_color) 
@@ -296,8 +317,8 @@ def show_organize_by_beacons_help(color='white', symbol_color='white'):
     dialog(f'                        você não encontrar problemas com a outra,', color=color)
     dialog(f'                        opção recomenda-se usá-la', color=color)
     dialog(f'', color=color)
-    dialog(f'                  Ex.: sudo ./main.py {o}--organize-by-beacons{b} wlan0', color=color, symbol_color=symbol_color)
-    dialog(f'                                      ---------------------', color=color)
+    dialog(f'                  Ex.: sudo wihunter {o}--organize-by-beacons{b} wlan0', color=color, symbol_color=symbol_color)
+    dialog(f'                                     ---------------------', color=color)
     dialog(f'                                   O programa dará preferência a', color='white', symbol_color=symbol_color)
     dialog(f'                                   programas com maior número de', color='white', symbol_color=symbol_color)
     dialog(f'                                   beacons capturados no momento', color='white', symbol_color=symbol_color) 
@@ -316,8 +337,8 @@ def show_organize_by_power_help(color='white', symbol_color='white'):
     dialog(f'                      recomenda-se o uso do argumento', color=color)
     dialog(f'                      "--organize-by-beacons"', color=color)
     dialog(f'', color=color)
-    dialog(f'                  Ex.: sudo ./main.py {o}--organize-by-power{b} wlan0', color=color, symbol_color=symbol_color)
-    dialog(f'                                      -------------------', color=color)
+    dialog(f'                  Ex.: sudo wihunter {o}--organize-by-power{b} wlan0', color=color, symbol_color=symbol_color)
+    dialog(f'                                     -------------------', color=color)
     dialog(f'                                   O programa dará preferência a', color='white', symbol_color=symbol_color)
     dialog(f'                                   programas com maior "power"', color='white', symbol_color=symbol_color)
     dialog(f'                                   (ou potência do sinal) no', color='white', symbol_color=symbol_color) 
@@ -331,19 +352,38 @@ def show_timeout_help(color='white', symbol_color='white'):
     dialog(f'                  o Airodump', color=color)
     dialog(f'                  <{w}int{c}> É preciso ser um valor inteiro maior que 5', color='cian', symbol_color=symbol_color)
     dialog(f'', color=color)
-    dialog(f'                  Ex.: sudo ./main.py {o}-t 20{b} wlan0', color=color, symbol_color=symbol_color)
-    dialog(f'                       sudo ./main.py {o}--timeoutt 20{b} wlan0', color=color, symbol_color=symbol_color)
-    dialog(f'                                      -------------', color=color)
+    dialog(f'                  Ex.: sudo wihunter {o}-t 20{b} wlan0', color=color, symbol_color=symbol_color)
+    dialog(f'                       sudo wihunter {o}--timeoutt 20{b} wlan0', color=color, symbol_color=symbol_color)
+    dialog(f'                                     -------------', color=color)
     dialog(f'                                   A busca por redes wi-fi será abortada', color='white', symbol_color=symbol_color)
     dialog(f'                                   automaticamente após 20 segundos', color='white', symbol_color=symbol_color) 
     dialog(f'', color=color)
 
+
+def show_wordlist_help(color='white', symbol_color='white'):
+    dialog(f'{c}-w{b} ou {c}--wordlist{b} : Indica a wordlist que deve ser usada para a', color=color)
+    dialog(f'                   quebra de senhas em ataques a redes WPA/WPA2', color=color)
+    dialog(f'', color=color)
+    dialog(f'                   Caso não seja indicada, será usada a wordlist', color=color)
+    dialog(f'                   padrão do Wifite, a wordlist-probable.txt', color=color)
+    dialog(f'                   <{w}File Path{c}> É preciso ser um arquivo', color='cian', symbol_color=symbol_color)
+    dialog(f'                   (ou o caminho para um arquivo) de wordlist', color='cian', symbol_color=symbol_color)
+    dialog(f'                   e com as devidas formatações', color='cian', symbol_color=symbol_color)
+    dialog(f'', color=color)
+    dialog(f'                  Ex.: sudo wihunter {o}-w /home/user/Documents/pass.txt{b} wlan0', color=color, symbol_color=symbol_color)
+    dialog(f'                       sudo wihunter {o}--wordlist my-wordlist.txt20{b} wlan0', color=color, symbol_color=symbol_color)
+    dialog(f'                                     ----------------------------', color=color)
+    dialog(f'                                   A busca por redes wi-fi será abortada', color='white', symbol_color=symbol_color)
+    dialog(f'                                   automaticamente após 20 segundos', color='white', symbol_color=symbol_color) 
+    dialog(f'', color=color)
+
+
 def show_help(color='white', symbol_color='white'):
     dialog(f'{c}-h{b} ou {c}--help{b} : Exibe o manual de ajuda do usuário', color=color)
     dialog(f'', color=color)
-    dialog(f'                  Ex.: sudo ./main.py {o}-h{b} wlan0', color=color, symbol_color=symbol_color)
-    dialog(f'                       sudo ./main.py {o}--help{b} wlan0', color=color, symbol_color=symbol_color)
-    dialog(f'                                      ------', color=color)
+    dialog(f'                  Ex.: sudo wihunter {o}-h{b} wlan0', color=color, symbol_color=symbol_color)
+    dialog(f'                       sudo wihunter {o}--help{b} wlan0', color=color, symbol_color=symbol_color)
+    dialog(f'                                     ------', color=color)
     dialog(f'                                   Abre esse menu em que você', color='white', symbol_color=symbol_color)
     dialog(f'                                   está agora :)', color='white', symbol_color=symbol_color) 
     dialog(f'', color=color)
