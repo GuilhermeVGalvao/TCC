@@ -61,6 +61,9 @@ args = sys.argv[:]
 def main():
     global CAN_EXECUTE
 
+    if not os.getuid() == 0:
+        sys.exit(f'{lr}[*] Wihunter deve ser executado como superusuário!')
+
     tester()
     if CAN_EXECUTE:
         start()
@@ -203,13 +206,17 @@ def tester():
 
                 if os.path.isfile(wordlist):
                     WORDLIST = wordlist
+                    args.pop(i+1)
+                    args.pop(i)
+                    continue
                 else:
                     dialog('Erro: arquivo ou diretório de wordlist não existe', color='lr')
+                    dialog('Em caso de dúvida, use o argumento "-h" ou "--help"', color='cian')
                     CAN_EXECUTE = False
                     return CAN_EXECUTE
             except IndexError as e:
-                dialog('VALOR DE DELAY NÃO ESPECIFICADO!', color='lr')
-                dialog('Digite apenas valores de delay válidos (números reais positivos)', color='lr')
+                dialog('ARQUIVO DE WORDLIS NÃO ESPECIFICADO!', color='lr')
+                dialog('Digite o nome ou o caminho do arquivo de wordlist', color='lr')
                 dialog('Em caso de dúvida, use o argumento "-h" ou "--help"', color='cian')
                 CAN_EXECUTE = False
                 return CAN_EXECUTE
