@@ -23,6 +23,10 @@ def main():
     os.system('apt-get install -y python3')
     print('')
 
+    dialog('Instalando pip3...', color='blue')
+    os.system('apt-get install -y pip3')
+    print('')
+
     dialog('Instalando git...', color='blue')
     os.system('apt-get install -y git')
     print('')
