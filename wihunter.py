@@ -227,17 +227,17 @@ def tester():
 
                 if answer == 'S':
                     os.system('python3 /opt/wihunter/uninstall.py')
-                    os.exit('')
+                    sys.exit('')
                 elif answer == 'N':
                     dialog('Desinstalação cancelada!', color='white')
-                    os.exit('')
+                    sys.exit('')
                 else:
                     dialog('Por favor digite apenas "S" ou "N"', color='white')
-                    os.exit('')
+                    sys.exit('')
             else:
                 dialog('Wihunter não está instalado no sistema')
                 dialog('para ser desinstalado')
-                os.exit('')
+                sys.exit('')
         elif '-h' in args or '--help' in args:
             helper()
             CAN_EXECUTE = False
