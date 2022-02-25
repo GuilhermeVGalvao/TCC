@@ -6,6 +6,7 @@ import re
 import subprocess
 from subprocess import Popen
 import json
+import time
 from printer import dialog
 from printer import show_wep_menu
 from printer import show_wpa_menu
@@ -60,8 +61,27 @@ def attack(networks, kill=False, wordlist=None):
                 
                 show_wep_menu()
 
+                start_time = time.time()
                 hex_key =__wep_attack(net, kill=kill, wordlist=None)[2]
                 net["hex_key"] = hex_key
+
+                final_time = time.time()
+
+                total_time = time.gmtime(final_time - start_time)
+                
+                if total_time <= 3600 and total_time > 60:
+                    minutes = time.gmtime(total_time)[4]
+                    seconds = time.gmtime(total_time)[5]
+
+                    dialog(f'Duração do ataque: {minutes}:{seconds} segundos', color='orange')
+                elif total_time <= 216000 and total_time > 3600:
+                    hour = time.gmtime(total_time)[3]
+                    minutes = time.gmtime(total_time)[4]
+                    seconds = time.gmtime(total_time)[5]
+                    
+                    dialog(f'Duração do ataque: {hour}:{minutes}:{seconds} segundos', color='orange')
+                else:
+                    dialog(f'Duração do ataque: {total_time} segundos', color='orange')
                 
                 if hex_key != '':
                     cracked_wep_networks_counter += 1
@@ -87,7 +107,25 @@ def attack(networks, kill=False, wordlist=None):
                     
                     show_wpa_wps_menu()
 
+                    start_time = time.time()
                     password = __wpa_wps_attack(net, kill=kill, wordlist=None)[2]
+                    final_time = time.time()
+
+                    total_time = time.gmtime(final_time - start_time)
+                    
+                    if total_time <= 3600 and total_time > 60:
+                        minutes = time.gmtime(total_time)[4]
+                        seconds = time.gmtime(total_time)[5]
+
+                        dialog(f'Duração do ataque: {minutes}:{seconds} segundos', color='orange')
+                    elif total_time <= 216000 and total_time > 3600:
+                        hour = time.gmtime(total_time)[3]
+                        minutes = time.gmtime(total_time)[4]
+                        seconds = time.gmtime(total_time)[5]
+                        
+                        dialog(f'Duração do ataque: {hour}:{minutes}:{seconds} segundos', color='orange')
+                    else:
+                        dialog(f'Duração do ataque: {total_time} segundos', color='orange')
 
                     if password != '':
                         cracked_wpa_with_wps_networks_counter += 1
@@ -113,7 +151,25 @@ def attack(networks, kill=False, wordlist=None):
                     
                     show_wpa_menu()
 
+                    start_time = time.time()
                     password = __wpa_attack(net, kill=kill, wordlist=None)[2]
+                    final_time = time.time()
+
+                    total_time = time.gmtime(final_time - start_time)
+                    
+                    if total_time <= 3600 and total_time > 60:
+                        minutes = time.gmtime(total_time)[4]
+                        seconds = time.gmtime(total_time)[5]
+
+                        dialog(f'Duração do ataque: {minutes}:{seconds} segundos', color='orange')
+                    elif total_time <= 216000 and total_time > 3600:
+                        hour = time.gmtime(total_time)[3]
+                        minutes = time.gmtime(total_time)[4]
+                        seconds = time.gmtime(total_time)[5]
+                        
+                        dialog(f'Duração do ataque: {hour}:{minutes}:{seconds} segundos', color='orange')
+                    else:
+                        dialog(f'Duração do ataque: {total_time} segundos', color='orange')
 
                     if password != '':
                         cracked_wpa_without_wps_networks_counter += 1
