@@ -184,8 +184,8 @@ def attack(networks, kill=False, wordlist=None):
     dialog(f'Redes WEP analizadas: {analized_wep_networks_counter}', color='cian')
     dialog(f'Redes WEP crackeadas: {cracked_wep_networks_counter}', color='cian')
     dialog(f'Redes WPA com WPS analizadas: {analized_wpa_with_wps_networks_counter}', color='cian')
-    dialog(f'Redes WPA com WPS crackeadas: {cracked_wpa_without_wps_networks_counter}', color='cian')
-    dialog(f'Redes WPA sem WPS analizadas: {analized_wpa_with_wps_networks_counter}', color='cian')
+    dialog(f'Redes WPA com WPS crackeadas: {cracked_wpa_with_wps_networks_counter}', color='cian')
+    dialog(f'Redes WPA sem WPS analizadas: {analized_wpa_without_wps_networks_counter}', color='cian')
     dialog(f'Redes WPA sem WPS crackeadas: {cracked_wpa_without_wps_networks_counter}', color='cian')
 
 
