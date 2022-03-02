@@ -16,7 +16,7 @@ def main():
     os.system( 'rm -rf /opt/wihunter/' )
 
     # Del the .sh executable in /usr/bin
-    print('[*] Excluíndo wihunter...')
+    print('[*] Excluindo wihunter...')
     sleep(0.2)
     os.system('rm -f /usr/bin/wihunter')
 
