@@ -79,6 +79,10 @@ def getdb():
             }
             content_json["wps"] = get_wps_from_bssid( content_json["bssid"] )
             content_json["beacons"] = get_beacons_from_bssid( content_json["bssid"] )
+
+            if content_json["wps"] == 'PSK':
+                content_json["wps"] = 'Unknwon'
+
             output.append(content_json)
     for i in range(1, len(output) ):
         output[i]["speed"] = int(output[i]["speed"])
