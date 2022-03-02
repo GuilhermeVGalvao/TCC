@@ -274,9 +274,9 @@ def __wpa_wps_attack(net, kill=False, wordlist=None):
             sys.stdout.flush()
 
             if 'Access Point Name: ' in line:
-                essid = line.split('ESSID: ')[1]
+                essid = line.split('Access Point Name: ')[1]
             if 'Access Point BSSID: ' in line:
-                bssid = line.split('Access Point Name: ')[1]
+                bssid = line.split('Access Point BSSID: ')[1]
             if '(password): ' in line:
                 password = line.split('(password): ')[1]
 
