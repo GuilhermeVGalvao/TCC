@@ -67,7 +67,7 @@ def attack(networks, kill=False, wordlist=None):
 
                 final_time = time.time()
 
-                total_time = time.gmtime(final_time - start_time)
+                total_time = final_time - start_time
                 
                 if total_time <= 3600 and total_time > 60:
                     minutes = time.gmtime(total_time)[4]
@@ -111,7 +111,7 @@ def attack(networks, kill=False, wordlist=None):
                     password = __wpa_wps_attack(net, kill=kill, wordlist=None)[2]
                     final_time = time.time()
 
-                    total_time = time.gmtime(final_time - start_time)
+                    total_time = final_time - start_time
                     
                     if total_time <= 3600 and total_time > 60:
                         minutes = time.gmtime(total_time)[4]
@@ -155,8 +155,8 @@ def attack(networks, kill=False, wordlist=None):
                     password = __wpa_attack(net, kill=kill, wordlist=None)[2]
                     final_time = time.time()
 
-                    total_time = time.gmtime(final_time - start_time)
-                    
+                    total_time = final_time - start_time
+
                     if total_time <= 3600 and total_time > 60:
                         minutes = time.gmtime(total_time)[4]
                         seconds = time.gmtime(total_time)[5]
