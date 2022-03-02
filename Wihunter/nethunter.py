@@ -138,6 +138,10 @@ def airodump_test(interface):
     except subprocess.TimeoutExpired as e:
         airodump.terminate()
         return True, None
+    except KeyboardInterrupt as e:
+        airodump.terminate()
+        dialog('Keyboard Interrupt', color='lr')
+        sys.exit('')
 
 
 def __show_realtime_output(process, timeout):
