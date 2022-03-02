@@ -77,5 +77,5 @@ def main():
     # os.system('cp xerosploit-installation-files/xerosploit-python2-to-3.py /opt/xerosploit/xerosploit.py')
 
 
-
-main()
+if __name__ == '__main__':
+    main()
