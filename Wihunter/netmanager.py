@@ -82,6 +82,8 @@ def getdb():
 
             if content_json["wps"] == 'PSK':
                 content_json["wps"] = 'Unknwon'
+            elif content_json["wps"] == 'WEP':
+                content_json["wps"] = 'Unknwon'
 
             output.append(content_json)
     for i in range(1, len(output) ):
