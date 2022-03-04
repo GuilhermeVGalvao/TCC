@@ -81,9 +81,9 @@ def getdb():
             content_json["beacons"] = get_beacons_from_bssid( content_json["bssid"] )
 
             if content_json["wps"] == 'PSK':
-                content_json["wps"] = 'Unknwon'
+                content_json["wps"] = 'Unknown'
             elif content_json["wps"] == 'WEP':
-                content_json["wps"] = 'Unknwon'
+                content_json["wps"] = 'Unknown'
 
             output.append(content_json)
     for i in range(1, len(output) ):
